@@ -18,13 +18,17 @@ def lista_posts(request):
     return render(request, "posts/lista_posts.html", {"posts": posts})
 
 def contacto(request):
-    return HttpResponse("Página de contacto")
+    contacto = {
+        "email": "contacto_mdiaz@miblog.com",
+        "twitter": "@mdiaz",
+    }
+    return render(request, "posts/contacto.html", {"contacto": contacto})
 
 def detalle_post(request, post_id):
     post = {
         "id": post_id,
         "titulo": f"Post numero {post_id}",
         "contenido": "Contenido de ejemplo del post",
-        "autor": "Autor del post",
+        "autor": "Mario Diaz",
     }
     return render(request, "posts/detalle_post.html", {"post": post})

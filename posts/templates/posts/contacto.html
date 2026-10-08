@@ -1,0 +1,14 @@
+{% extends "posts/base.html" %}
+{% block title %}Contacto | Mi Blog{% endblock %}
+{% block content %}
+    <h2>Contacto</h2>
+    <h2>Podés escribirme a:</h2>
+    <ul>
+        <li>
+            <p>Email:</p><a href="mailto:{{ contacto.email }}">{{ contacto.email }}</a>
+        </li>
+        <li>
+            <p>Twitter:</p><a href="https://twitter.com/{{ contacto.twitter|slice:'1:' }}" target="_blank">{{ contacto.twitter }}</a>
+        </li>
+    </ul>
+{% endblock %}
