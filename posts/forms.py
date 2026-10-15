@@ -14,11 +14,15 @@ class PostForm(forms.ModelForm):
         labels = {
             "titulo": "Título del post",
             "contenido": "Contenido",
+            "autor": "Autor",
             "estado": "Estado de publicación",
         }
         widgets = {
             "titulo": forms.TextInput(attrs={
                 "placeholder": "Escribe el título del post"
+            }),
+            "autor": forms.TextInput(attrs={
+                "placeholder": "Escribe el nombre del autor"
             }),
             "contenido": forms.Textarea(attrs={
                 "rows": 6,
@@ -27,7 +31,7 @@ class PostForm(forms.ModelForm):
         }
 
     def clean_titulo(self):
-        
+
         titulo = self.cleaned_data.get("titulo")
         if len(titulo) < 5:
             raise forms.ValidationError("El título debe tener al menos 5 caracteres.")
