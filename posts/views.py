@@ -1,7 +1,7 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from .models import Post
-from .forms import ContactoForm
+from .forms import ContactoForm, PostForm
 
 # Create your views here.
 def inicio(request):
@@ -43,6 +43,21 @@ def detalle_post(request, post_id):
         return HttpResponse("El post no existe.")
     
     return render(request, "posts/detalle_post.html", {"post": post})
+
+def crear_post(request):
+    if request.method == "POST":
+        form = PostForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+            return redirect("lista_posts")
+    else:
+        form = PostForm()
+
+    return render(request, "posts/crear_post.html", {"form": form})
+
+
 
 
 
