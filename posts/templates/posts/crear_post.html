@@ -1,0 +1,25 @@
+{% extends "posts/base.html" %}
+{% block title %}Crear Post | Mi Blog{% endblock %}
+
+{% block content %}
+    <h1>Crear Post</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            {{ form.titulo.label_tag }}
+            {{ form.titulo }}
+            {{ form.titulo.errors }}
+        </div>
+        <div>
+            {{ form.contenido.label_tag }}
+            {{ form.contenido }}
+            {{ form.contenido.errors }}
+        </div>
+        <div>
+            {{ form.estado.label_tag }}
+            {{ form.estado }}
+            {{ form.estado.errors }}
+        </div>
+        <button type="submit">Guardar</button>
+    </form>
+{% endblock %}
