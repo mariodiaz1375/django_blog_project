@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Post
+from .forms import ContactoForm
 
 # Create your views here.
 def inicio(request):
@@ -19,11 +20,21 @@ def lista_posts(request):
     return render(request, "posts/lista_posts.html", context)
 
 def contacto(request):
-    contacto = {
-        "email": "contacto_mdiaz@miblog.com",
-        "twitter": "@mdiaz",
-    }
-    return render(request, "posts/contacto.html", {"contacto": contacto})
+    if request.method == "POST":
+        form = ContactoForm(request.POST)
+        if form.is_valid():
+            nombre = form.cleaned_data["nombre"]
+            correo = form.cleaned_data["correo"]   
+            mensaje = form.cleaned_data["mensaje"]
+
+            print("Nombre:", nombre)
+            print("Correo:", correo)
+            print("Mensaje:", mensaje)
+
+            return HttpResponse(f"¡Gracias por contactarnos, {nombre}!")
+    else:
+        form = ContactoForm()
+    return render(request, "posts/contacto.html", {"form": form})
 
 def detalle_post(request, post_id):
     try:
@@ -32,5 +43,8 @@ def detalle_post(request, post_id):
         return HttpResponse("El post no existe.")
     
     return render(request, "posts/detalle_post.html", {"post": post})
+
+
+
 
 
