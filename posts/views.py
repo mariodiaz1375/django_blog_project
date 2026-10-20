@@ -83,6 +83,20 @@ def editar_post(request, slug):
         "titulo_pagina": "Editar post",
         "texto_boton": "Guardar cambios"
     })
+
+def eliminar_post(request, slug):
+
+    post = get_object_or_404(Post, slug=slug)
+
+    if request.method == 'POST':
+        post.delete()
+        return redirect('lista_posts')
+
+    return render(request, 'posts/confirm_delete_post.html', {'post': post})
+
+
+
+
     
 
 

@@ -9,4 +9,5 @@ urlpatterns = [
     path("posts/<slug:slug>/editar/", views.editar_post, name="editar_post"),
     # path("posts/<int:post_id>/", views.detalle_post, name="detalle_post"),
     path("posts/<slug:slug>/", views.detalle_post, name="detalle_post"),
+    path("posts/<slug:slug>/eliminar/", views.eliminar_post, name="eliminar_post"),
 ]

@@ -6,8 +6,10 @@
         <p><strong>Autor:</strong> {{ post.autor }}</p>
         <p><strong>Fecha de creación:</strong> {{ post.fecha_creacion|date:"d/m/Y H:i" }}</p>
         <hr />
-        <p><strong>Contenido:</strong> {{ post.contenido }}</p>
+            <p>{{ post.contenido }}</p>
+        <hr />
     </article>
     <a href="{% url 'editar_post' post.slug %}">Editar</a>
+    <a href="{% url 'eliminar_post' post.slug %}">Eliminar</a>
     <a href="{% url 'lista_posts' %}">Volver al listado</a>
 {% endblock %}
