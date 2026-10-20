@@ -57,7 +57,34 @@ def crear_post(request):
     else:
         form = PostForm()
 
-    return render(request, "posts/crear_post.html", {"form": form})
+    return render(request, "posts/post_form.html", {
+        "form": form,
+        "texto_boton": "Crear post",
+        "titulo_pagina": "Crear post"
+    })
+
+def editar_post(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+
+        if form.is_valid():
+            
+            form.save()
+            return redirect("detalle_post", slug=post.slug)
+        
+    else:
+        form = PostForm(instance=post)
+
+    return render(request, "posts/post_form.html", {
+        "form": form,
+        "post": post,
+        "titulo_pagina": "Editar post",
+        "texto_boton": "Guardar cambios"
+    })
+    
+
 
 
 

@@ -1,5 +1,5 @@
 {% extends "posts/base.html" %}
-{% block title %}Crear Post | Mi Blog{% endblock %}
+{% block title %}{{ titulo_pagina }} | Mi Blog{% endblock %}
 
 {% block content %}
     <h1>Crear Post</h1>
@@ -25,6 +25,6 @@
             {{ form.estado }}
             {{ form.estado.errors }}
         </div>
-        <button type="submit">Guardar</button>
+        <button type="submit">{{ texto_boton }}</button>
     </form>
 {% endblock %}

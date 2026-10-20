@@ -8,5 +8,6 @@
         <hr />
         <p><strong>Contenido:</strong> {{ post.contenido }}</p>
     </article>
+    <a href="{% url 'editar_post' post.slug %}">Editar</a>
     <a href="{% url 'lista_posts' %}">Volver al listado</a>
 {% endblock %}
