@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 # Create your models here.
 class Post(models.Model):
@@ -12,9 +13,15 @@ class Post(models.Model):
     autor = models.CharField(max_length=100)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=20, choices=ESTADOS, default="borrador")
+    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True)
 
     class Meta:
         ordering = ["-fecha_creacion"]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.titulo)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Post: {self.titulo} | Autor: {self.autor}"

@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from .models import Post
 from .forms import ContactoForm, PostForm
 
@@ -36,11 +36,13 @@ def contacto(request):
         form = ContactoForm()
     return render(request, "posts/contacto.html", {"form": form})
 
-def detalle_post(request, post_id):
-    try:
-        post = Post.objects.get(id=post_id)
-    except Post.DoesNotExist:
-        return HttpResponse("El post no existe.")
+def detalle_post(request, slug):  # en caso de volver a usar el id del post, cambiar slug por post_id
+    # try:
+    #     post = Post.objects.get(id=post_id)
+    # except Post.DoesNotExist:
+    #     return HttpResponse("El post no existe.")
+
+    post = get_object_or_404(Post, slug=slug)
     
     return render(request, "posts/detalle_post.html", {"post": post})
 

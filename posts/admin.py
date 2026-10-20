@@ -7,11 +7,12 @@ admin.site.index_title = "Gestión de contenidos"
 
 # Register your models here.
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("titulo", "autor", "fecha_creacion", "estado")
+    list_display = ("titulo", "autor", "fecha_creacion", "estado", "slug")
     list_filter = ("estado", "fecha_creacion")
     search_fields = ("titulo", "contenido", "autor")
     list_editable = ("estado",)
     ordering = ("-fecha_creacion",)
     list_per_page = 10
+    prepopulated_fields = {"slug": ("titulo",)}  # genera el slug a partir del titulo del post
 
 admin.site.register(Post, PostAdmin)
