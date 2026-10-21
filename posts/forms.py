@@ -9,13 +9,14 @@ class ContactoForm(forms.Form):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ["titulo", "contenido", "autor", "estado"]
+        fields = ["titulo", "contenido", "autor", "estado", "imagen"]
 
         labels = {
             "titulo": "Título del post",
             "contenido": "Contenido",
             "autor": "Autor",
             "estado": "Estado de publicación",
+            "imagen": "Imagen del post"
         }
         widgets = {
             "titulo": forms.TextInput(attrs={

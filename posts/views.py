@@ -48,7 +48,7 @@ def detalle_post(request, slug):  # en caso de volver a usar el id del post, cam
 
 def crear_post(request):
     if request.method == "POST":
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)  # Agregar request.FILES para manejar la imagen
 
         if form.is_valid():
             form.save()
@@ -67,7 +67,7 @@ def editar_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
 
     if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)
 
         if form.is_valid():
             

@@ -5,6 +5,9 @@
         <h2>{{ post.titulo }}</h2>
         <p><strong>Autor:</strong> {{ post.autor }}</p>
         <p><strong>Fecha de creación:</strong> {{ post.fecha_creacion|date:"d/m/Y H:i" }}</p>
+        {% if post.imagen %}
+            <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" width="300" />
+        {% endif %}
         <hr />
             <p>{{ post.contenido }}</p>
         <hr />

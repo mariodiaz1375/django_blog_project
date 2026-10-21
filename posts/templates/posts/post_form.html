@@ -2,9 +2,21 @@
 {% block title %}{{ titulo_pagina }} | Mi Blog{% endblock %}
 
 {% block content %}
-    <h1>Crear Post</h1>
-    <form method="post">
+    <h1>{{ titulo_pagina }}</h1>
+
+    {% if post and post.imagen %}
+        <p>Imagen actual:</p>
+        <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" width="300" />
+    {% endif %}
+    
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {{ form.as_p }}
+        <!-- <div>
+            {{ form.imagen.label_tag }}
+            {{ form.imagen }}
+            {{ form.imagen.errors }}
+        </div>
         <div>
             {{ form.titulo.label_tag }}
             {{ form.titulo }}
@@ -24,8 +36,12 @@
             {{ form.estado.label_tag }}
             {{ form.estado }}
             {{ form.estado.errors }}
-        </div>
+        </div> -->
         <button type="submit">{{ texto_boton }}</button>
     </form>
-    <a href="{% url 'detalle_post' post.slug %}">Cancelar</a>
+    {% if post %}
+        <a href="{% url 'detalle_post' post.slug %}">Cancelar edición</a>
+    {% else %}
+        <a href="{% url 'lista_posts' %}">Cancelar creación</a>
+    {% endif %}
 {% endblock %}
