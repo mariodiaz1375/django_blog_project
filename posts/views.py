@@ -51,8 +51,8 @@ def crear_post(request):
         form = PostForm(request.POST, request.FILES)  # Agregar request.FILES para manejar la imagen
 
         if form.is_valid():
+            
             form.save()
-
             return redirect("lista_posts")
     else:
         form = PostForm()
