@@ -93,16 +93,3 @@ def eliminar_post(request, slug):
         return redirect('lista_posts')
 
     return render(request, 'posts/confirm_delete_post.html', {'post': post})
-
-
-
-
-    
-
-
-
-
-
-
-
-
