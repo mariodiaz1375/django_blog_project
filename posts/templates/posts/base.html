@@ -23,11 +23,19 @@
                     </form>
                 {% else %}
                     <a href="{% url 'login' %}">Iniciar sesión</a>
+                    <a href="{% url 'registro' %}">Registrarse</a>
                 {% endif %}
             </span>
         </nav>
     </header>
     <main class="site-main">
+        {% if messages %}
+            <ul class="messages">
+                {% for m in messages %}
+                    <li>{{ m }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         {% block content %}
         {% endblock %}
     </main>

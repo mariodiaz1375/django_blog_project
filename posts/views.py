@@ -1,7 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .models import Post
 from .forms import ContactoForm, PostForm
+
 
 # Create your views here.
 def inicio(request):
@@ -46,6 +48,8 @@ def detalle_post(request, slug):  # en caso de volver a usar el id del post, cam
     
     return render(request, "posts/detalle_post.html", {"post": post})
 
+
+@login_required
 def crear_post(request):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)  # Agregar request.FILES para manejar la imagen
@@ -63,6 +67,7 @@ def crear_post(request):
         "titulo_pagina": "Crear post"
     })
 
+@login_required
 def editar_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
 
@@ -84,6 +89,7 @@ def editar_post(request, slug):
         "texto_boton": "Guardar cambios"
     })
 
+@login_required
 def eliminar_post(request, slug):
 
     post = get_object_or_404(Post, slug=slug)
