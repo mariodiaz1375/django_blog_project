@@ -3,7 +3,7 @@
 {% block content %}
     <article>
         <h2>{{ post.titulo }}</h2>
-        <p><strong>Autor:</strong> {{ post.autor }}</p>
+        <p><strong>Autor:</strong> {{ post.autor.username }}</p>
         <p><strong>Fecha de creación:</strong> {{ post.fecha_creacion|date:"d/m/Y H:i" }}</p>
         {% if post.imagen %}
             <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" width="300" />
@@ -12,7 +12,9 @@
             <p>{{ post.contenido }}</p>
         <hr />
     </article>
-    <a href="{% url 'editar_post' post.slug %}">Editar</a>
-    <a href="{% url 'eliminar_post' post.slug %}">Eliminar</a>
+    {% if puede_editar %}
+        <a href="{% url 'editar_post' post.slug %}">Editar</a>
+        <a href="{% url 'eliminar_post' post.slug %}">Eliminar</a>
+    {% endif %}
     <a href="{% url 'lista_posts' %}">Volver al listado</a>
 {% endblock %}

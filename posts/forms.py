@@ -9,7 +9,7 @@ class ContactoForm(forms.Form):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ["titulo", "contenido", "autor", "estado", "imagen"]
+        fields = ["titulo", "contenido", "estado", "imagen"]
 
         labels = {
             "titulo": "Título del post",
@@ -38,4 +38,9 @@ class PostForm(forms.ModelForm):
             raise forms.ValidationError("El título debe tener al menos 5 caracteres.")
 
         return titulo
+
+class BuscarForm(forms.Form):
+    q = forms.CharField(label="Buscar", required=False, widget=forms.TextInput(attrs={
+        "placeholder": "Buscar posts por título"
+    }))
 

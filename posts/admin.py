@@ -9,7 +9,7 @@ admin.site.index_title = "Gestión de contenidos"
 class PostAdmin(admin.ModelAdmin):
     list_display = ("titulo", "autor", "fecha_creacion", "estado", "slug")
     list_filter = ("estado", "fecha_creacion")
-    search_fields = ("titulo", "contenido", "autor")
+    search_fields = ("titulo", "contenido", "autor__username")
     list_editable = ("estado",)
     ordering = ("-fecha_creacion",)
     list_per_page = 10

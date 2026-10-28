@@ -2,6 +2,13 @@
 {% block title %}Posts | Mi Blog{% endblock %}
 {% block content %}
     <h2>Listado de posts</h2>
+
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Buscar</button>
+        <a href="{% url 'lista_posts' %}">Limpiar</a>
+    </form>
+
     <ul>
         {% for post in posts %}
             <li>
@@ -9,7 +16,7 @@
                 <a href="{% url 'detalle_post' post.slug %}"> 
                     {{ post.titulo }}
                 </a>
-                - {{ post.autor }}
+                - {{ post.autor.username }}
             </li>
         {% endfor %}
     </ul>

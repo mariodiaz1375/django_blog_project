@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from .models import Post
-from .forms import ContactoForm, PostForm
+from .forms import BuscarForm, ContactoForm, PostForm
 
 
 # Create your views here.
@@ -12,14 +13,21 @@ def inicio(request):
 # def lista_posts(request):
 #     return HttpResponse("Lista de posts del blog")
 
-def lista_posts(request):
-    posts = Post.objects.filter(estado='publicado').order_by("-fecha_creacion")
+def puede_editar_post(user, post):
+    return user.is_authenticated and (post.autor_id == user.id)
 
-    context = {
-        "posts": posts,
-    }   
-    
-    return render(request, "posts/lista_posts.html", context)
+
+def lista_posts(request):
+    posts = Post.objects.select_related("autor")
+    form = BuscarForm(request.GET or None)
+    if form.is_valid():
+        q = form.cleaned_data.get("q")
+        autor = form.cleaned_data.get("autor")
+        if q:
+            posts = posts.filter(titulo__icontains=q)
+        if autor:
+            posts = posts.filter(autor__username__iexact=autor)
+    return render(request, "posts/lista_posts.html", {"posts": posts, "form": form})
 
 def contacto(request):
     if request.method == "POST":
@@ -46,7 +54,10 @@ def detalle_post(request, slug):  # en caso de volver a usar el id del post, cam
 
     post = get_object_or_404(Post, slug=slug)
     
-    return render(request, "posts/detalle_post.html", {"post": post})
+    return render(request, "posts/detalle_post.html", 
+                  {"post": post, 
+                   "puede_editar": puede_editar_post(request.user, post)})
+
 
 
 @login_required
@@ -55,9 +66,10 @@ def crear_post(request):
         form = PostForm(request.POST, request.FILES)  # Agregar request.FILES para manejar la imagen
 
         if form.is_valid():
-            
-            form.save()
-            return redirect("lista_posts")
+            post = form.save(commit=False)
+            post.autor = request.user  # Asignar el usuario autenticado como autor
+            post.save()
+            return redirect("detalle_post", slug=post.slug)
     else:
         form = PostForm()
 
@@ -70,6 +82,9 @@ def crear_post(request):
 @login_required
 def editar_post(request, slug):
     post = get_object_or_404(Post, slug=slug)
+
+    if not puede_editar_post(request.user, post):
+        raise PermissionDenied("No tienes permiso para editar este post.")
 
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
@@ -94,8 +109,17 @@ def eliminar_post(request, slug):
 
     post = get_object_or_404(Post, slug=slug)
 
+    if not puede_editar_post(request.user, post):
+        raise PermissionDenied("No tienes permiso para eliminar este post.")
+
     if request.method == 'POST':
         post.delete()
         return redirect('lista_posts')
 
     return render(request, 'posts/confirm_delete_post.html', {'post': post})
+
+
+@login_required
+def mis_posts(request):
+    posts = Post.objects.filter(autor=request.user).order_by("-fecha_creacion")
+    return render(request, "posts/mis_posts.html", {"posts": posts})
