@@ -14,7 +14,7 @@ def inicio(request):
 #     return HttpResponse("Lista de posts del blog")
 
 def puede_editar_post(user, post):
-    return user.is_authenticated and (post.autor_id == user.id)
+    return (user.is_authenticated and post.autor_id == user.id) or user.has_perm("posts.change_post") or user.is_superuser
 
 
 def lista_posts(request):
