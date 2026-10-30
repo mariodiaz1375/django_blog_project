@@ -1,0 +1,27 @@
+{% extends "posts/base.html" %}
+{% block title %}Contacto | Mi Blog{% endblock %}
+{% load static %}
+{% block content %}
+
+<nav>
+    <a href="{% url 'lista_posts' %}">Inicio</a>
+    {% if user.is_authenticated %}
+        <span>Hola, {{ user.username }}</span>
+        {% if user.perfil.avatar %}
+            <img
+                src="{{ user.perfil.avatar.url }}"
+                alt="Avatar de {{ user.username }}" 
+                class="avatar-navbar" />
+        {% else %}
+            <img
+                src="{% static 'cuentas/imagenes/default-user.png' %}"
+                alt="Avatar por defecto"
+                class="avatar-navbar" />
+        {% endif %}
+    {% else %}
+        <a href="{% url 'login' %}">Iniciar sesión</a>
+        <a href="{% url 'registro' %}">Crear cuenta</a>
+    {% endif %}
+</nav>
+
+{% endblock %}

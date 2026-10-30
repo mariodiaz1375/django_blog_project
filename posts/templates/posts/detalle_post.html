@@ -1,7 +1,23 @@
 {% extends "posts/base.html" %}
 {% block title %}{{ post.titulo }} | Mi Blog{% endblock %}
 {% block content %}
+{% load static %}
     <article>
+        <header>
+            {% if post.autor.perfil.avatar %}
+                <img
+                    src="{{ post.autor.perfil.avatar.url }}"
+                    alt="Avatar de {{ post.autor.username }}"
+                    class="avatar-post" />
+            {% else %}
+                <img
+                    src="{% static 'cuentas/imagenes/default_avatar.jpg' %}"
+                    alt="Avatar por defecto"
+                    class="avatar-post" />
+            {% endif %}
+
+            <p>Publicado por {{ post.autor.username }}</p>
+        </header>
         <h2>{{ post.titulo }}</h2>
         <p><strong>Autor:</strong> {{ post.autor.username }}</p>
         <p><strong>Fecha de creación:</strong> {{ post.fecha_creacion|date:"d/m/Y H:i" }}</p>

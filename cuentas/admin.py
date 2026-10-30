@@ -3,4 +3,4 @@ from .models import Perfil
 
 # Register your models here.
 
-admin.register(Perfil)
+admin.site.register(Perfil)

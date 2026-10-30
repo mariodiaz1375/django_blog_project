@@ -14,21 +14,34 @@
             <a href="{% url 'inicio' %}">Inicio</a>
             <a href="{% url 'lista_posts' %}">Posts</a>
             <a href="{% url 'contacto' %}">Contacto</a>
-            {% if user.is_authenticated %}
-                <a href="{% url 'mis_posts' %}">Mis Posts</a>
-            {% endif %}
-            <span class="session">
+            <div>
                 {% if user.is_authenticated %}
-                    <span>Bienvenido, {{ user.username }}!</span>
-                    <form method="post" action="{% url 'logout' %}" class="inline">
-                        {% csrf_token %}
-                        <button type="submit">Salir</button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'login' %}">Iniciar sesión</a>
-                    <a href="{% url 'registro' %}">Registrarse</a>
+                    <a href="{% url 'mis_posts' %}">Mis Posts</a>
+                    {% if user.perfil.avatar %}
+                        <img
+                            src="{{ user.perfil.avatar.url }}"
+                            alt="Avatar de {{ user.username }}" 
+                            class="avatar-navbar" />
+                    {% else %}
+                        <img
+                            src="{% static 'cuentas/imagenes/default_avatar.jpg' %}"
+                            alt="Avatar por defecto"
+                            class="avatar-navbar" />
+                    {% endif %}
                 {% endif %}
-            </span>
+                <span class="session">
+                    {% if user.is_authenticated %}
+                        <span>Bienvenido, {{ user.username }}!</span>
+                        <form method="post" action="{% url 'logout' %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit">Salir</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}">Iniciar sesión</a>
+                        <a href="{% url 'registro' %}">Registrarse</a>
+                    {% endif %}
+                </span>
+            </div>
         </nav>
     </header>
     <main class="site-main">
