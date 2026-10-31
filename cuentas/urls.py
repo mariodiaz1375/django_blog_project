@@ -6,6 +6,8 @@ urlpatterns = [
     path("login/", auth_views.LoginView.as_view(template_name="registration/login.html"), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("registro/", views.registro, name="registro"),
+    path("mi_perfil/", views.mi_perfil, name="mi_perfil"),
+    path("mi_perfil/editar/", views.editar_perfil, name="editar_perfil"),
 
     #cambio de contraseña
     path(

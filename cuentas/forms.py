@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from .models import Perfil
 
 user = get_user_model()
 
@@ -17,3 +18,9 @@ class RegistroForm(UserCreationForm):
         if user.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError("El correo electrónico ya está registrado.")
         return email
+    
+
+class PerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ["biografia", "link_web", "avatar"]

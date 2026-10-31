@@ -14,9 +14,8 @@
             <a href="{% url 'inicio' %}">Inicio</a>
             <a href="{% url 'lista_posts' %}">Posts</a>
             <a href="{% url 'contacto' %}">Contacto</a>
-            <div>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'mis_posts' %}">Mis Posts</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'mi_perfil' %}">
                     {% if user.perfil.avatar %}
                         <img
                             src="{{ user.perfil.avatar.url }}"
@@ -28,20 +27,20 @@
                             alt="Avatar por defecto"
                             class="avatar-navbar" />
                     {% endif %}
+                </a>
+            {% endif %}
+            <span class="session">
+                {% if user.is_authenticated %}
+                    <span>Bienvenido, {{ user.username }}!</span>
+                    <form method="post" action="{% url 'logout' %}" class="inline">
+                        {% csrf_token %}
+                        <button type="submit">Salir</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Iniciar sesión</a>
+                    <a href="{% url 'registro' %}">Registrarse</a>
                 {% endif %}
-                <span class="session">
-                    {% if user.is_authenticated %}
-                        <span>Bienvenido, {{ user.username }}!</span>
-                        <form method="post" action="{% url 'logout' %}" class="inline">
-                            {% csrf_token %}
-                            <button type="submit">Salir</button>
-                        </form>
-                    {% else %}
-                        <a href="{% url 'login' %}">Iniciar sesión</a>
-                        <a href="{% url 'registro' %}">Registrarse</a>
-                    {% endif %}
-                </span>
-            </div>
+            </span>
         </nav>
     </header>
     <main class="site-main">
