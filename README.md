@@ -1,82 +1,111 @@
 # Blog Django
 
-Proyecto base de un blog web desarrollado con Django. Incluye la configuración del proyecto `blog_project` y la aplicación principal `posts`, preparada para gestionar las publicaciones del blog.
+Aplicación web de blog desarrollada con Django. Permite consultar publicaciones, crear y administrar posts, registrar usuarios y mantener un perfil con biografía, sitio web y avatar.
 
-## Instalación
+## Funcionalidades actuales
 
-### Clonar el repositorio
+- Listado de publicaciones y búsqueda por título.
+- Detalle de cada publicación mediante una URL con slug.
+- Creación de publicaciones para usuarios autenticados, con título, contenido, estado e imagen opcional.
+- Edición y eliminación de publicaciones por su autor, usuarios con permiso de cambio o superusuarios.
+- Sección para que cada usuario consulte sus propias publicaciones.
+- Registro, inicio y cierre de sesión.
+- Perfil de usuario editable con biografía, enlace web y avatar.
+- Formulario de contacto. Actualmente valida los datos y los muestra en la salida del servidor; no envía correos.
+- Panel de administración de Django para gestionar publicaciones y perfiles.
 
-Reemplaza `URL_DEL_REPOSITORIO` por la URL real del repositorio:
+Los estados disponibles para una publicación son **Borrador**, **Publicado** y **Archivado**. La lista y el detalle no filtran las publicaciones por estado.
 
-```bash
-git clone URL_DEL_REPOSITORIO
-cd NOMBRE_DEL_REPOSITORIO
-```
+La recuperación de contraseña tiene plantillas preparadas, pero sus rutas están desactivadas actualmente.
 
-### Crear el entorno virtual
+## Requisitos
 
-```bash
-python -m venv venv
-```
+- Python en una versión compatible con Django 6.1.
+- Las dependencias indicadas en `requirements.txt`.
 
-### Activar el entorno virtual
+## Instalación y ejecución
 
-En Windows PowerShell:
+1. Clona el repositorio y entra en su carpeta:
 
-```powershell
-.\venv\Scripts\Activate.ps1
-```
+   ```bash
+   git clone URL_DEL_REPOSITORIO
+   cd django_blog_project
+   ```
 
-En Linux o macOS:
+2. Crea y activa un entorno virtual:
 
-```bash
-source venv/bin/activate
-```
+   ```bash
+   python -m venv venv
+   ```
 
-### Instalar las dependencias
+   En Windows PowerShell:
 
-Con el entorno virtual activo, ejecuta:
+   ```powershell
+   .\venv\Scripts\Activate.ps1
+   ```
 
-```bash
-pip install -r requirements.txt
-```
+   En Linux o macOS:
 
-### Preparar la base de datos
+   ```bash
+   source venv/bin/activate
+   ```
 
-```bash
-python manage.py migrate
-```
+3. Instala las dependencias:
 
-### Iniciar el servidor de desarrollo
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```bash
-python manage.py runserver
-```
+4. Define `SECRET_KEY`, que es obligatoria para iniciar Django. Por ejemplo, en Windows PowerShell:
 
-Abre [http://127.0.0.1:8000/](http://127.0.0.1:8000/) en el navegador. El panel de administración está disponible en [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/).
+   ```powershell
+   $env:SECRET_KEY = "reemplaza-esto-por-una-clave-secreta"
+   ```
 
-## Aplicación principal
+   En Linux o macOS:
 
-- `posts`: aplicación inicial del proyecto, destinada a gestionar las publicaciones del blog.
+   ```bash
+   export SECRET_KEY="reemplaza-esto-por-una-clave-secreta"
+   ```
 
-## Configuración y carga de imágenes
+   La variable debe estar definida en cada terminal nueva donde ejecutes comandos del proyecto. No uses una clave de desarrollo en producción ni la guardes en el repositorio.
 
-El proyecto guarda los archivos subidos fuera de las aplicaciones, en la carpeta `media/` ubicada en la raíz del repositorio. Esta ubicación y la URL pública se configuran en `blog_project/settings.py`:
+5. Aplica las migraciones y, si necesitas administrar el sitio, crea un usuario administrador:
 
-```python
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-```
+   ```bash
+   python manage.py migrate
+   python manage.py createsuperuser
+   ```
 
-El modelo `Post` tiene un campo de imagen opcional (`imagen`). Django guarda cada archivo dentro de `media/posts/`, según `upload_to="posts/"`. Para procesar imágenes se instala Pillow junto con las demás dependencias (`requirements.txt`).
+6. Inicia el servidor de desarrollo:
 
-### Crear o actualizar una publicación con imagen
+   ```bash
+   python manage.py runserver
+   ```
 
-1. Inicia el servidor con `python manage.py runserver`.
-2. Abre [http://127.0.0.1:8000/crear_post/](http://127.0.0.1:8000/crear_post/) para crear una publicación. Para cambiar una imagen, abre la edición de una publicación existente.
-3. Completa el formulario y selecciona un archivo en el campo **Imagen del post**. El campo es opcional.
-4. Envía el formulario. Si se guarda correctamente, el archivo queda en `media/posts/` y la publicación conserva su ruta en la base de datos.
+   Abre [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
 
-El formulario usa `enctype="multipart/form-data"` para enviar archivos, y las vistas de creación y edición pasan `request.FILES` al `PostForm` para que Django procese la imagen. Las plantillas muestran la imagen cuando la publicación tiene una.
+## Rutas principales
 
-En desarrollo, `blog_project/urls.py` agrega una ruta para servir archivos bajo `MEDIA_URL` desde `MEDIA_ROOT`, pero solo cuando `DEBUG` está activado. Esta forma de servir archivos es para desarrollo; en producción hay que configurar el servidor web o un servicio de almacenamiento para publicar los archivos de `MEDIA_ROOT`.
+| Ruta | Descripción |
+| --- | --- |
+| `/` | Inicio |
+| `/posts/` | Listado y búsqueda de publicaciones |
+| `/posts/<slug>/` | Detalle de una publicación |
+| `/crear_post/` | Crear publicación (requiere iniciar sesión) |
+| `/mis_posts/` | Publicaciones del usuario (requiere iniciar sesión) |
+| `/contacto/` | Formulario de contacto |
+| `/cuentas/registro/` | Registro |
+| `/cuentas/login/` | Inicio de sesión |
+| `/cuentas/logout/` | Cierre de sesión |
+| `/cuentas/mi_perfil/` | Perfil del usuario (requiere iniciar sesión) |
+| `/cuentas/mi_perfil/editar/` | Editar perfil (requiere iniciar sesión) |
+| `/admin/` | Administración de Django |
+
+Las rutas para editar o eliminar publicaciones incluyen el slug y están disponibles desde el detalle de cada post.
+
+## Base de datos y archivos multimedia
+
+La configuración actual usa SQLite y guarda la base de datos en `db.sqlite3`. Aunque `mysqlclient` figura entre las dependencias, el proyecto no está configurado actualmente para conectarse a MySQL.
+
+Las imágenes de publicaciones se guardan en `media/posts/` y los avatares en `media/avatares/`. `MEDIA_ROOT` y `MEDIA_URL` están configurados en `blog_project/settings.py`; durante el desarrollo, Django sirve esos archivos cuando `DEBUG` está activado. Para producción, configura un servidor web o un servicio de almacenamiento para los archivos multimedia y sigue la lista de verificación de despliegue de Django.
